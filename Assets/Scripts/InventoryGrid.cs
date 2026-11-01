@@ -6,15 +6,31 @@ public class InventoryGrid : MonoBehaviour
     private const float TileWidth = 32;
     private const float TileHeight = 32;
 
+
+    InventoryItem[,] inventoryItemSlot;
+
     private RectTransform _rectTransform;
 
     private Vector2 _mouseGridPosition;
 
     private Vector2Int _tileGridPosition;
 
+    [SerializeField] private int gridSizeWidth;
+
+    [SerializeField] private int gridSizeHeight;
+
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
+        Init(gridSizeWidth, gridSizeHeight);
+    }
+
+    private void Init(int width, int height)
+    {
+        inventoryItemSlot = new InventoryItem[width, height];
+        Vector2 gridSize = new Vector2(width * TileWidth, height * TileHeight);
+        _rectTransform.sizeDelta = gridSize;
+
     }
 
     public Vector2Int GetTileGridPosition(Vector2Int mousePosition)
