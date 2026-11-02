@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -19,10 +20,16 @@ public class InventoryGrid : MonoBehaviour
 
     [SerializeField] private int gridSizeHeight;
 
+    [SerializeField] private GameObject smallCube;
+
+
+
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
         Init(gridSizeWidth, gridSizeHeight);
+        InventoryItem inventoryItem = Instantiate(smallCube).GetComponent<InventoryItem>();
+        PlaceItem(inventoryItem, 1, 1);
     }
 
     private void Init(int width, int height)
@@ -42,5 +49,19 @@ public class InventoryGrid : MonoBehaviour
         _tileGridPosition.y = (int)(_mouseGridPosition.y / TileHeight);
 
         return _tileGridPosition;
+    }
+
+    public void PlaceItem(InventoryItem inventoryItem, int posX, int posY)
+    {
+        RectTransform itemRectTransform = inventoryItem.GetComponent<RectTransform>();
+        itemRectTransform.SetParent(_rectTransform);
+        inventoryItemSlot[posX, posY] = inventoryItem;
+
+        Vector2 position = new Vector2();
+        position.x = posX * TileWidth + TileWidth / 2;
+        position.y = -(posY * TileHeight + TileHeight/ 2);
+        Debug.Log(position.y);
+
+        itemRectTransform.localPosition = position;
     }
 }
