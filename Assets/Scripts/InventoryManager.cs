@@ -14,16 +14,25 @@ public class InventoryManager: MonoBehaviour
         set => inventoryGrid = value;
     }
 
+    InventoryItem selectedItem;
+
     private Vector2Int currentMouse;
 
     private void Update()
     {
-        if (inventoryGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
-        {
-           currentMouse = inventoryGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
-            Debug.Log(currentMouse);
-
-        }
+    //    if (inventoryGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
+    //    {
+    //       currentMouse = inventoryGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
+            
+    //        if(selectedItem == null)
+    //        {
+    //            selectedItem = inventoryGrid.PickUpItem(_tileGridPosition.x, _tileGridPosition.y);
+    //        }
+    //        else
+    //        {
+    //            inventoryGrid.PlaceItem(selectedItem, _tileGridPosition.x, _tileGridPosition.y);
+    //        }
+    //    }
     }
 
 }
