@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class InventoryGrid : MonoBehaviour
 {
-    private const float TileWidth = 32;
-    private const float TileHeight = 32;
+    public const float TileWidth = 32;
+    public const float TileHeight = 32;
 
 
     InventoryItem[,] inventoryItemSlot;
@@ -28,8 +28,6 @@ public class InventoryGrid : MonoBehaviour
     {
         _rectTransform = GetComponent<RectTransform>();
         Init(gridSizeWidth, gridSizeHeight);
-        InventoryItem inventoryItem = Instantiate(smallCube).GetComponent<InventoryItem>();
-        PlaceItem(inventoryItem, 1, 1);
     }
 
     private void Init(int width, int height)
@@ -51,17 +49,64 @@ public class InventoryGrid : MonoBehaviour
         return _tileGridPosition;
     }
 
+    public InventoryItem PickUpItem(int x, int y)
+    {
+        InventoryItem item = inventoryItemSlot[x, y];
+
+        if (item == null) return null;
+
+        SetItemSize(item, item.GridPositionX, item.GridPositionY, null);
+        
+        return item;
+    }
+
     public void PlaceItem(InventoryItem inventoryItem, int posX, int posY)
     {
+
+        if (CheckBounds(posX, posY) == false)
+        {
+            return;
+        }
+
         RectTransform itemRectTransform = inventoryItem.GetComponent<RectTransform>();
         itemRectTransform.SetParent(_rectTransform);
-        inventoryItemSlot[posX, posY] = inventoryItem;
+
+
+        SetItemSize(inventoryItem, posX, posY, inventoryItem);
+
+        inventoryItem.SetGridPosition(posX, posY);
 
         Vector2 position = new Vector2();
-        position.x = posX * TileWidth + TileWidth / 2;
-        position.y = -(posY * TileHeight + TileHeight/ 2);
+        position.x = posX * TileWidth + TileWidth * inventoryItem.ItemData.sizeWidth / 2;
+        position.y = -(posY * TileHeight + TileHeight * inventoryItem.ItemData.sizeHeight / 2);
         Debug.Log(position.y);
 
         itemRectTransform.localPosition = position;
+    }
+
+    private void SetItemSize(InventoryItem item, int posX, int posY, InventoryItem value)
+    {
+        for (int x = 0; x < item.ItemData.sizeWidth; x++)
+        {
+            for (int y = 0; y < item.ItemData.sizeHeight; y++)
+            {
+                inventoryItemSlot[posX + x, posY + y] = item;
+            }
+        }
+    }
+
+  private bool CheckBounds(int posX, int posY)
+    {
+        if (posX <0 || posY < 0)
+        {
+            return false;
+        }
+
+        if (posX > gridSizeWidth || posY > gridSizeHeight)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

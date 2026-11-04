@@ -15,24 +15,84 @@ public class InventoryManager: MonoBehaviour
     }
 
     InventoryItem selectedItem;
+    RectTransform itemRectTransform;
+
+
+    [SerializeField] List<ItemData> items;
+    [SerializeField] private GameObject itemPrefab;
+
+    [SerializeField] private Transform uiPanelTransform; 
+
 
     private Vector2Int currentMouse;
 
     private void Update()
     {
-    //    if (inventoryGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
-    //    {
-    //       currentMouse = inventoryGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
-            
-    //        if(selectedItem == null)
-    //        {
-    //            selectedItem = inventoryGrid.PickUpItem(_tileGridPosition.x, _tileGridPosition.y);
-    //        }
-    //        else
-    //        {
-    //            inventoryGrid.PlaceItem(selectedItem, _tileGridPosition.x, _tileGridPosition.y);
-    //        }
-    //    }
+        StickToMouse();
+
+        if (Keyboard.current.qKey.wasPressedThisFrame)
+        {
+            CreateRandom();
+        }
+
+
+        if (inventoryGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            GrabItem();
+        }
     }
 
+    private void CreateRandom()
+    {
+        InventoryItem inventoryItem = Instantiate(itemPrefab).GetComponent<InventoryItem>();
+        selectedItem = inventoryItem;
+        itemRectTransform = inventoryItem.GetComponent<RectTransform>();
+        itemRectTransform.SetParent(uiPanelTransform);
+
+
+        inventoryItem.Set(items[Random.Range(0, items.Count)]);       
+    }
+
+    private void StickToMouse()
+    {
+        if (selectedItem != null)
+        {
+            itemRectTransform.position = Mouse.current.position.ReadValue();
+        }
+    }
+
+    private void GrabItem()
+    {
+        currentMouse = inventoryGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
+
+        if (selectedItem == null)
+        {
+            PickUpItem();
+        }
+        else
+        {
+            PlaceItem();
+        }
+    }
+
+    private void PickUpItem()
+    {
+        selectedItem = inventoryGrid.PickUpItem(currentMouse.x, currentMouse.y);
+
+        if(selectedItem != null)
+        {
+            itemRectTransform = selectedItem.GetComponent<RectTransform>();
+        }
+        
+    }
+
+    private void PlaceItem()
+    {
+        inventoryGrid.PlaceItem(selectedItem, currentMouse.x, currentMouse.y);
+
+
+        selectedItem = null;
+    }
+
+  
 }

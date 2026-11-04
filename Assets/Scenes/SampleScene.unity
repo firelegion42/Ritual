@@ -578,6 +578,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d938f76e2d37504c98b537743c64150, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryManager
+  items:
+  - {fileID: 11400000, guid: 3d79581237f700946a711f2e34bd4d77, type: 2}
+  - {fileID: 11400000, guid: 07b40ab7ac5610c4fad8084602562078, type: 2}
+  - {fileID: 11400000, guid: eca1ccfe0b51eff45a45c1feaeb3e4b4, type: 2}
+  itemPrefab: {fileID: 2870061961403234582, guid: e3dfeff4d0342ed4b9955130ffc32e95, type: 3}
+  uiPanelTransform: {fileID: 683927727}
 --- !u!1 &683927726
 GameObject:
   m_ObjectHideFlags: 0
