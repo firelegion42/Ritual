@@ -102,6 +102,7 @@ public class InventoryGrid : MonoBehaviour
             return false;
         }
 
+
         if (posX > gridSizeWidth || posY > gridSizeHeight)
         {
             return false;
