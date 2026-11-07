@@ -51,6 +51,11 @@ public class InventoryGrid : MonoBehaviour
 
     public InventoryItem PickUpItem(int x, int y)
     {
+        if(CheckBounds(x, y, 1, 1) == false)
+        {
+            return null;
+        }
+
         InventoryItem item = inventoryItemSlot[x, y];
 
         if (item == null) return null;
@@ -63,7 +68,7 @@ public class InventoryGrid : MonoBehaviour
     public void PlaceItem(InventoryItem inventoryItem, int posX, int posY)
     {
 
-        if (CheckBounds(posX, posY) == false)
+        if (CheckBounds(posX, posY, inventoryItem.ItemData.sizeWidth, inventoryItem.ItemData.sizeHeight) == false)
         {
             return;
         }
@@ -90,12 +95,12 @@ public class InventoryGrid : MonoBehaviour
         {
             for (int y = 0; y < item.ItemData.sizeHeight; y++)
             {
-                inventoryItemSlot[posX + x, posY + y] = item;
+                inventoryItemSlot[posX + x, posY + y] = value;
             }
         }
     }
 
-  private bool CheckBounds(int posX, int posY)
+  private bool CheckBounds(int posX, int posY, int width, int height)
     {
         if (posX <0 || posY < 0)
         {
@@ -103,7 +108,7 @@ public class InventoryGrid : MonoBehaviour
         }
 
 
-        if (posX > gridSizeWidth || posY > gridSizeHeight)
+        if (posX + width > gridSizeWidth || posY + height > gridSizeHeight)
         {
             return false;
         }
