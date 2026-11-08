@@ -94,5 +94,8 @@ public class InventoryManager: MonoBehaviour
         selectedItem = null;
     }
 
-  
+    internal static void AddItem()
+    {
+        throw new System.NotImplementedException();
+    }
 }
