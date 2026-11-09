@@ -7,6 +7,8 @@ public class ItemData : ScriptableObject
     public string itemName;
     public int sizeWidth;
 
+    public int maxAmount;
+
     public int sizeHeight;
 
     public Sprite sprite;

@@ -1,4 +1,6 @@
 using System;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +11,7 @@ public class InventoryItem : MonoBehaviour
 
     public int GridPositionY { get; private set; }
 
-
+    [SerializeField] private TextMeshPro _itemCountText;
     public void Set(ItemData itemData)
     {
         ItemData = itemData;
