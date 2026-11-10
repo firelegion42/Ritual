@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97235b2a9ad071b4f83344d07b5b6327, type: 3}
   m_Name: Ammo
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: 
-  sizeWidth: 0
-  sizeHeight: 0
-  sprite: {fileID: 0}
+  itemName: Ammo
+  sizeWidth: 2
+  maxAmount: 1
+  sizeHeight: 1
+  sprite: {fileID: 956390961, guid: 65fa9eb512cb8dd4da8ca9ded5583368, type: 3}

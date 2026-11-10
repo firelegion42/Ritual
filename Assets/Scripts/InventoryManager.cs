@@ -19,6 +19,8 @@ public class InventoryManager: MonoBehaviour
 
 
     [SerializeField] List<ItemData> items;
+
+    [SerializeField] ItemData ammoData;
     [SerializeField] private GameObject itemPrefab;
 
     [SerializeField] private Transform uiPanelTransform; 
@@ -94,8 +96,10 @@ public class InventoryManager: MonoBehaviour
         selectedItem = null;
     }
 
-    internal static void AddItem()
+    public void AddItem()
     {
-        throw new System.NotImplementedException();
+       InventoryItem ammo = Instantiate(itemPrefab).GetComponent<InventoryItem>();
+        ammo.Set(ammoData);
+        inventoryGrid.PlaceItem(ammo, 1, 1);
     }
 }

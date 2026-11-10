@@ -1,10 +1,14 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WorldItem : MonoBehaviour
 {
     [SerializeField] private ItemData _itemData;
-    [SerializeField] private InventoryGrid inventoryGrid;
+
+    [SerializeField] private InventoryManager inventoryManager;
+
+   // [SerializeField] TextMeshPro _UItext;
 
     public ItemData ItemData => _itemData;
 
@@ -13,6 +17,7 @@ public class WorldItem : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         playerNear = true;
+
     }
 
     private void OnCollisionExit(Collision collision)
@@ -24,7 +29,7 @@ public class WorldItem : MonoBehaviour
     {
         if(playerNear == true && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            InventoryManager.AddItem();
+            inventoryManager.AddItem();
         }
     }
 }
