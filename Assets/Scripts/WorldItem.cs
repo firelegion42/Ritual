@@ -1,6 +1,8 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class WorldItem : MonoBehaviour
 {
@@ -8,21 +10,24 @@ public class WorldItem : MonoBehaviour
 
     [SerializeField] private InventoryManager inventoryManager;
 
-   // [SerializeField] TextMeshPro _UItext;
+    [SerializeField] private  TextMeshProUGUI _UItext;
 
     public ItemData ItemData => _itemData;
 
     private bool playerNear;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         playerNear = true;
+        _UItext.gameObject.SetActive(true);
 
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
         playerNear = false;
+        _UItext.gameObject.SetActive(false);
+
     }
 
     private void Update()

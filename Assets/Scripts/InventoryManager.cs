@@ -15,6 +15,7 @@ public class InventoryManager: MonoBehaviour
     }
 
     InventoryItem selectedItem;
+    InventoryItem overlapItem;
     RectTransform itemRectTransform;
 
 
@@ -90,16 +91,25 @@ public class InventoryManager: MonoBehaviour
 
     private void PlaceItem()
     {
-        inventoryGrid.PlaceItem(selectedItem, currentMouse.x, currentMouse.y);
+       bool complete = inventoryGrid.PlaceItem(selectedItem, currentMouse.x, currentMouse.y, ref overlapItem);
+        if (complete)
+        {
+            selectedItem = null;
+            if(overlapItem != null)
+            {
+                selectedItem = overlapItem;
+                overlapItem = null;
+                itemRectTransform = selectedItem.GetComponent<RectTransform>();
+            }
+        }
 
-
-        selectedItem = null;
+        
     }
 
     public void AddItem()
     {
        InventoryItem ammo = Instantiate(itemPrefab).GetComponent<InventoryItem>();
         ammo.Set(ammoData);
-        inventoryGrid.PlaceItem(ammo, 1, 1);
+      //  inventoryGrid.PlaceItem(ammo, 1, 1);
     }
 }

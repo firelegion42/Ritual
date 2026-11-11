@@ -51,7 +51,7 @@ public class InventoryGrid : MonoBehaviour
 
     public InventoryItem PickUpItem(int x, int y)
     {
-        if(CheckBounds(x, y, 1, 1) == false)
+        if (CheckBounds(x, y, 1, 1) == false)
         {
             return null;
         }
@@ -61,17 +61,25 @@ public class InventoryGrid : MonoBehaviour
         if (item == null) return null;
 
         SetItemSize(item, item.GridPositionX, item.GridPositionY, null);
-        
+
         return item;
     }
 
-    public void PlaceItem(InventoryItem inventoryItem, int posX, int posY)
+    public bool PlaceItem(InventoryItem inventoryItem, int posX, int posY, ref InventoryItem overlapItem)
     {
 
-        if (CheckBounds(posX, posY, inventoryItem.ItemData.sizeWidth, inventoryItem.ItemData.sizeHeight) == false)
+        if (CheckBounds(posX, posY, inventoryItem.ItemData.sizeWidth, inventoryItem.ItemData.sizeHeight) == false
+            || (CheckOverlap(posX, posY, inventoryItem.ItemData.sizeWidth, inventoryItem.ItemData.sizeHeight, ref overlapItem) == false))
         {
-            return;
+            overlapItem = null;
+            return false;
         }
+
+        if (overlapItem != null)
+        {
+            SetItemSize(overlapItem, overlapItem.GridPositionX, overlapItem.GridPositionY, null);
+        }
+
 
         RectTransform itemRectTransform = inventoryItem.GetComponent<RectTransform>();
         itemRectTransform.SetParent(_rectTransform);
@@ -87,6 +95,33 @@ public class InventoryGrid : MonoBehaviour
         Debug.Log(position.y);
 
         itemRectTransform.localPosition = position;
+
+        return true;
+    }
+
+    private bool CheckOverlap(int posX, int posY, int sizeWidth, int sizeHeight, ref InventoryItem overlapItem)
+    {
+        for (int x = 0; x < sizeWidth; x++)
+        {
+            for (int y = 0; y < sizeHeight; y++)
+            {
+                if (inventoryItemSlot[posX + x, posY + y] != null)
+                {
+                    if (overlapItem == null)
+                    {
+                        overlapItem = inventoryItemSlot[posX + x, posY + y];
+                    }
+                    else
+                    {
+                        if (overlapItem != inventoryItemSlot[posX + x, posY + y])
+                        {
+                            return false;
+                        }                        
+                    }
+                }
+            }         
+        }
+        return true;
     }
 
     private void SetItemSize(InventoryItem item, int posX, int posY, InventoryItem value)
