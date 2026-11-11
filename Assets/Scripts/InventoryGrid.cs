@@ -89,14 +89,20 @@ public class InventoryGrid : MonoBehaviour
 
         inventoryItem.SetGridPosition(posX, posY);
 
-        Vector2 position = new Vector2();
-        position.x = posX * TileWidth + TileWidth * inventoryItem.ItemData.sizeWidth / 2;
-        position.y = -(posY * TileHeight + TileHeight * inventoryItem.ItemData.sizeHeight / 2);
+        Vector2 position = CalculateGridPosition(inventoryItem, posX, posY);
         Debug.Log(position.y);
 
         itemRectTransform.localPosition = position;
 
         return true;
+    }
+
+    public Vector2 CalculateGridPosition(InventoryItem inventoryItem, int posX, int posY)
+    {
+        Vector2 position = new Vector2();
+        position.x = posX * TileWidth + TileWidth * inventoryItem.ItemData.sizeWidth / 2;
+        position.y = -(posY * TileHeight + TileHeight * inventoryItem.ItemData.sizeHeight / 2);
+        return position;
     }
 
     private bool CheckOverlap(int posX, int posY, int sizeWidth, int sizeHeight, ref InventoryItem overlapItem)
