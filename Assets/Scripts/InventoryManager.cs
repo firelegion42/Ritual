@@ -14,6 +14,8 @@ public class InventoryManager: MonoBehaviour
         set => inventoryGrid = value;
     }
 
+    [SerializeField] private InventoryGrid mainGrid;
+
     InventoryItem selectedItem;
     InventoryItem overlapItem;
     RectTransform itemRectTransform;
@@ -106,10 +108,10 @@ public class InventoryManager: MonoBehaviour
         
     }
 
-    public void AddItem()
+    public void AddAmmoItem()
     {
        InventoryItem ammo = Instantiate(itemPrefab).GetComponent<InventoryItem>();
         ammo.Set(ammoData);
-      //  inventoryGrid.PlaceItem(ammo, 1, 1);
+      inventoryGrid.PlaceItem(ammo, 1, 1, ref overlapItem);
     }
 }

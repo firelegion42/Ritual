@@ -34,7 +34,7 @@ public class WorldItem : MonoBehaviour
     {
         if(playerNear == true && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            inventoryManager.AddItem();
+            inventoryManager.AddAmmoItem();
         }
     }
 }
