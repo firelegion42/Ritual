@@ -102,7 +102,6 @@ public class InventoryManager: MonoBehaviour
 
     public void AddItem(ItemData itemData)
     {
-        Debug.Log($"grid: {_mainGrid}, prefab: {_itemPrefab}, data: {itemData}");
         InventoryItem item = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
         item.Set(itemData);
       _mainGrid.PlaceItem(item, 1, 1, ref _overlapItem);
