@@ -5,31 +5,23 @@ using UnityEngine.InputSystem;
 
 public class InventoryManager: MonoBehaviour
 {
-    private InventoryGrid inventoryGrid;
+  public InventoryGrid InventoryGrid { get; set; }
 
-    public InventoryGrid InventoryGrid
-    {
-        get => inventoryGrid;
+    [SerializeField] private InventoryGrid _mainGrid;
 
-        set => inventoryGrid = value;
-    }
-
-    [SerializeField] private InventoryGrid mainGrid;
-
-    InventoryItem selectedItem;
-    InventoryItem overlapItem;
-    RectTransform itemRectTransform;
+   private InventoryItem _selectedItem;
+   private  InventoryItem _overlapItem;
+   private RectTransform _itemRectTransform;
 
 
-    [SerializeField] List<ItemData> items;
+    [SerializeField] private List<ItemData> _items;
 
-    [SerializeField] ItemData ammoData;
-    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private GameObject _itemPrefab;
 
-    [SerializeField] private Transform uiPanelTransform; 
+    [SerializeField] private Transform _uiPanelTransform; 
 
 
-    private Vector2Int currentMouse;
+    private Vector2Int _currentMouse;
 
     private void Update()
     {
@@ -41,7 +33,7 @@ public class InventoryManager: MonoBehaviour
         }
 
 
-        if (inventoryGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (InventoryGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             GrabItem();
         }
@@ -49,28 +41,28 @@ public class InventoryManager: MonoBehaviour
 
     private void CreateRandom()
     {
-        InventoryItem inventoryItem = Instantiate(itemPrefab).GetComponent<InventoryItem>();
-        selectedItem = inventoryItem;
-        itemRectTransform = inventoryItem.GetComponent<RectTransform>();
-        itemRectTransform.SetParent(uiPanelTransform);
+        InventoryItem inventoryItem = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
+        _selectedItem = inventoryItem;
+        _itemRectTransform = inventoryItem.GetComponent<RectTransform>();
+        _itemRectTransform.SetParent(_uiPanelTransform);
 
 
-        inventoryItem.Set(items[Random.Range(0, items.Count)]);       
+        inventoryItem.Set(_items[Random.Range(0, _items.Count)]);       
     }
 
     private void StickToMouse()
     {
-        if (selectedItem != null)
+        if (_selectedItem != null)
         {
-            itemRectTransform.position = Mouse.current.position.ReadValue();
+            _itemRectTransform.position = Mouse.current.position.ReadValue();
         }
     }
 
     private void GrabItem()
     {
-        currentMouse = inventoryGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
+        _currentMouse = InventoryGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
 
-        if (selectedItem == null)
+        if (_selectedItem == null)
         {
             PickUpItem();
         }
@@ -82,36 +74,37 @@ public class InventoryManager: MonoBehaviour
 
     private void PickUpItem()
     {
-        selectedItem = inventoryGrid.PickUpItem(currentMouse.x, currentMouse.y);
+        _selectedItem = InventoryGrid.PickUpItem(_currentMouse.x, _currentMouse.y);
 
-        if(selectedItem != null)
+        if(_selectedItem != null)
         {
-            itemRectTransform = selectedItem.GetComponent<RectTransform>();
+            _itemRectTransform = _selectedItem.GetComponent<RectTransform>();
         }
         
     }
 
     private void PlaceItem()
     {
-       bool complete = inventoryGrid.PlaceItem(selectedItem, currentMouse.x, currentMouse.y, ref overlapItem);
+       bool complete = InventoryGrid.PlaceItem(_selectedItem, _currentMouse.x, _currentMouse.y, ref _overlapItem);
         if (complete)
         {
-            selectedItem = null;
-            if(overlapItem != null)
+            _selectedItem = null;
+            if(_overlapItem != null)
             {
-                selectedItem = overlapItem;
-                overlapItem = null;
-                itemRectTransform = selectedItem.GetComponent<RectTransform>();
+                _selectedItem = _overlapItem;
+                _overlapItem = null;
+                _itemRectTransform = _selectedItem.GetComponent<RectTransform>();
             }
         }
 
         
     }
 
-    public void AddAmmoItem()
+    public void AddItem(ItemData itemData)
     {
-       InventoryItem ammo = Instantiate(itemPrefab).GetComponent<InventoryItem>();
-        ammo.Set(ammoData);
-      inventoryGrid.PlaceItem(ammo, 1, 1, ref overlapItem);
+        Debug.Log($"grid: {_mainGrid}, prefab: {_itemPrefab}, data: {itemData}");
+        InventoryItem item = Instantiate(_itemPrefab).GetComponent<InventoryItem>();
+        item.Set(itemData);
+      _mainGrid.PlaceItem(item, 1, 1, ref _overlapItem);
     }
 }

@@ -28,7 +28,15 @@ public class PlayerMove : MonoBehaviour, IMoveable
         {
             Quaternion target = Quaternion.LookRotation(lookDirection);
             rb.MoveRotation(Quaternion.Slerp(rb.rotation, target, _rotationSpeed * Time.deltaTime));
-        } 
+        }
+
+        Debug.Log(_movementSpeed);
+    }
+
+
+    public void ModifySpeed(float modifier)
+    {
+        _movementSpeed += modifier;
     }
    
 }

@@ -8,33 +8,34 @@ public class WorldItem : MonoBehaviour
 {
     [SerializeField] private ItemData _itemData;
 
-    [SerializeField] private InventoryManager inventoryManager;
+    [SerializeField] private InventoryManager _inventoryManager;
 
-    [SerializeField] private  TextMeshProUGUI _UItext;
+    [SerializeField] private  TextMeshProUGUI _uiText;
 
     public ItemData ItemData => _itemData;
 
-    private bool playerNear;
+    private bool _playerNear;
 
     private void OnTriggerEnter(Collider other)
     {
-        playerNear = true;
-        _UItext.gameObject.SetActive(true);
+        _playerNear = true;
+        _uiText.gameObject.SetActive(true);
 
     }
 
     private void OnTriggerExit(Collider other)
     {
-        playerNear = false;
-        _UItext.gameObject.SetActive(false);
+        _playerNear = false;
+        _uiText.gameObject.SetActive(false);
 
     }
 
     private void Update()
     {
-        if(playerNear == true && Keyboard.current.eKey.wasPressedThisFrame)
+        if(_playerNear == true && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            inventoryManager.AddAmmoItem();
+            _inventoryManager.AddItem(_itemData);
+            Destroy(gameObject, 0.5f);
         }
     }
 }

@@ -1,16 +1,28 @@
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class PassiveEffect : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private InventoryGrid inventory;
+
+    [SerializeField] private PlayerMove player;
+
+
+    public void ApplyEffect(InventoryItem item)
     {
-        
+        if (item.ItemData is IPassive effect)
+        {
+            effect.ApplyEffect(player);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RemoveEffect(InventoryItem item)
     {
-        
+        if (item.ItemData is IPassive effect)
+        {
+            effect.RemoveEffect(player);
+        }
     }
 }

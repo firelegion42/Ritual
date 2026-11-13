@@ -1,6 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
+using static UnityEditor.Progress;
 
 public class InventoryGrid : MonoBehaviour
 {
@@ -8,7 +11,7 @@ public class InventoryGrid : MonoBehaviour
     public const float TileHeight = 32;
 
 
-    InventoryItem[,] inventoryItemSlot;
+    InventoryItem[,] _inventoryItemSlot;
 
     private RectTransform _rectTransform;
 
@@ -16,23 +19,22 @@ public class InventoryGrid : MonoBehaviour
 
     private Vector2Int _tileGridPosition;
 
-    [SerializeField] private int gridSizeWidth;
+    [SerializeField] private int _gridSizeWidth;
 
-    [SerializeField] private int gridSizeHeight;
+    [SerializeField] private int _gridSizeHeight;
 
-    [SerializeField] private GameObject smallCube;
-
-
+    [SerializeField] private UnityEvent<InventoryItem> ItemPlaced;
+    [SerializeField] private UnityEvent<InventoryItem> ItemRemoved;
 
     private void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
-        Init(gridSizeWidth, gridSizeHeight);
+        Init(_gridSizeWidth, _gridSizeHeight);
     }
 
     private void Init(int width, int height)
     {
-        inventoryItemSlot = new InventoryItem[width, height];
+        _inventoryItemSlot = new InventoryItem[width, height];
         Vector2 gridSize = new Vector2(width * TileWidth, height * TileHeight);
         _rectTransform.sizeDelta = gridSize;
 
@@ -56,11 +58,12 @@ public class InventoryGrid : MonoBehaviour
             return null;
         }
 
-        InventoryItem item = inventoryItemSlot[x, y];
+        InventoryItem item = _inventoryItemSlot[x, y];
 
         if (item == null) return null;
 
         SetItemSize(item, item.GridPositionX, item.GridPositionY, null);
+        ItemRemoved.Invoke(item);
 
         return item;
     }
@@ -78,6 +81,7 @@ public class InventoryGrid : MonoBehaviour
         if (overlapItem != null)
         {
             SetItemSize(overlapItem, overlapItem.GridPositionX, overlapItem.GridPositionY, null);
+            ItemRemoved.Invoke(overlapItem);
         }
 
 
@@ -93,6 +97,8 @@ public class InventoryGrid : MonoBehaviour
         Debug.Log(position.y);
 
         itemRectTransform.localPosition = position;
+
+        ItemPlaced.Invoke(inventoryItem);
 
         return true;
     }
@@ -111,15 +117,15 @@ public class InventoryGrid : MonoBehaviour
         {
             for (int y = 0; y < sizeHeight; y++)
             {
-                if (inventoryItemSlot[posX + x, posY + y] != null)
+                if (_inventoryItemSlot[posX + x, posY + y] != null)
                 {
                     if (overlapItem == null)
                     {
-                        overlapItem = inventoryItemSlot[posX + x, posY + y];
+                        overlapItem = _inventoryItemSlot[posX + x, posY + y];
                     }
                     else
                     {
-                        if (overlapItem != inventoryItemSlot[posX + x, posY + y])
+                        if (overlapItem != _inventoryItemSlot[posX + x, posY + y])
                         {
                             return false;
                         }                        
@@ -136,7 +142,7 @@ public class InventoryGrid : MonoBehaviour
         {
             for (int y = 0; y < item.ItemData.sizeHeight; y++)
             {
-                inventoryItemSlot[posX + x, posY + y] = value;
+                _inventoryItemSlot[posX + x, posY + y] = value;
             }
         }
     }
@@ -149,7 +155,7 @@ public class InventoryGrid : MonoBehaviour
         }
 
 
-        if (posX + width > gridSizeWidth || posY + height > gridSizeHeight)
+        if (posX + width > _gridSizeWidth || posY + height > _gridSizeHeight)
         {
             return false;
         }

@@ -11,7 +11,7 @@ public class InventoryItem : MonoBehaviour
 
     public int GridPositionY { get; private set; }
 
-    [SerializeField] private TextMeshPro _itemCountText;
+    [SerializeField] private TextMeshProUGUI _itemCountText;
     public void Set(ItemData itemData)
     {
         ItemData = itemData;
