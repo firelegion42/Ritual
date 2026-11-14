@@ -20,6 +20,6 @@ public class InventoryHighllight : MonoBehaviour
 
         Vector2 position = inventory.CalculateGridPosition(item, item.GridPositionX, item.GridPositionY);
 
-
+        highlight.localPosition = position;
     }
 }
