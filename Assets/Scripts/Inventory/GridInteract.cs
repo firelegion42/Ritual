@@ -1,10 +1,17 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using VContainer;
 
 public class GridInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private InventoryGrid _selectedGrid;
-    [SerializeField] private InventoryManager _inventoryManager;
+    private InventoryManager _inventoryManager;
+
+    [Inject]
+    public void Construct(InventoryManager inventoryManager)
+    {
+        _inventoryManager = inventoryManager;
+    }
     
 
     public void OnPointerEnter(PointerEventData eventData)

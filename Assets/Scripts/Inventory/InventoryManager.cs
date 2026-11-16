@@ -2,12 +2,11 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using VContainer;
 
 public class InventoryManager: MonoBehaviour
 {
-  public InventoryGrid InventoryGrid { get; set; }
-
-    [SerializeField] private InventoryGrid _mainGrid;
+  private InventoryGrid _mainGrid;
 
    private InventoryItem _selectedItem;
    private  InventoryItem _overlapItem;
@@ -23,6 +22,15 @@ public class InventoryManager: MonoBehaviour
 
     private Vector2Int _currentMouse;
 
+    public InventoryGrid InventoryGrid { get; internal set; }
+
+    [Inject]
+    public void Construct (InventoryGrid inventoryGrid)
+    {
+        _mainGrid = inventoryGrid;
+    }
+
+
     private void Update()
     {
         StickToMouse();
@@ -33,7 +41,7 @@ public class InventoryManager: MonoBehaviour
         }
 
 
-        if (InventoryGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (_mainGrid != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             GrabItem();
         }
@@ -60,7 +68,7 @@ public class InventoryManager: MonoBehaviour
 
     private void GrabItem()
     {
-        _currentMouse = InventoryGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
+        _currentMouse = _mainGrid.GetTileGridPosition(Vector2Int.FloorToInt(Mouse.current.position.ReadValue()));
 
         if (_selectedItem == null)
         {
@@ -74,7 +82,7 @@ public class InventoryManager: MonoBehaviour
 
     private void PickUpItem()
     {
-        _selectedItem = InventoryGrid.PickUpItem(_currentMouse.x, _currentMouse.y);
+        _selectedItem = _mainGrid.PickUpItem(_currentMouse.x, _currentMouse.y);
 
         if(_selectedItem != null)
         {
@@ -85,7 +93,7 @@ public class InventoryManager: MonoBehaviour
 
     private void PlaceItem()
     {
-       bool complete = InventoryGrid.PlaceItem(_selectedItem, _currentMouse.x, _currentMouse.y, ref _overlapItem);
+       bool complete = _mainGrid.PlaceItem(_selectedItem, _currentMouse.x, _currentMouse.y, ref _overlapItem);
         if (complete)
         {
             _selectedItem = null;

@@ -1,16 +1,52 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using VContainer;
 
 public class TakeItem : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private InventoryManager _inventoryManager;
+
+    [SerializeField] private TextMeshProUGUI _hintText;
+
+    public InventoryManager Inventory => _inventoryManager;
+
+    private ITakeable _currentItem;
+
+
+    [Inject]
+    public void Construct(InventoryManager inventoryManager)
     {
-        
+        _inventoryManager = inventoryManager;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if(other.TryGetComponent(out ITakeable takeable))
+        {
+            _currentItem = takeable;
+            _hintText.gameObject.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        ClearItem();
+    }
+
+    private void Update()
+    {
+        if (_currentItem != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            _currentItem.Interact(this);
+            ClearItem();
+        }
+    }
+
+    private void ClearItem()
+    {
+        _currentItem = null;
+        _hintText.gameObject.SetActive(false);
     }
 }

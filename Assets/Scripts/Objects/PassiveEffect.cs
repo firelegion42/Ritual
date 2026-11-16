@@ -1,13 +1,21 @@
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using VContainer;
 using static UnityEditor.Progress;
 
 public class PassiveEffect : MonoBehaviour
 {
-    [SerializeField] private InventoryGrid inventory;
+    private InventoryGrid _inventory;
 
     [SerializeField] private PlayerMove player;
+
+
+    [Inject]
+    public void Construct(InventoryGrid inventoryGrid)
+    {
+        _inventory = inventoryGrid;
+    }
 
 
     public void ApplyEffect(InventoryItem item)
