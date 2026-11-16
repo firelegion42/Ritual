@@ -10,7 +10,7 @@ public class GridInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [Inject]
     public void Construct(InventoryManager inventoryManager)
     {
-        _inventoryManager = inventoryManager;
+        _inventoryManager = inventoryManager;     
     }
     
 
