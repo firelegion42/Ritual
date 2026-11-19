@@ -35,7 +35,7 @@ public class TakeItem : MonoBehaviour
         ClearItem();
     }
 
-    private void Update()
+   private void SomeInvokedMethod()
     {
         if (_currentItem != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
@@ -43,6 +43,14 @@ public class TakeItem : MonoBehaviour
             ClearItem();
         }
     }
+    //private void Update()
+    //{
+    //    if (_currentItem != null && Keyboard.current.eKey.wasPressedThisFrame)
+    //    {
+    //        _currentItem.Interact(this);
+    //        ClearItem();
+    //    }
+    //}
 
     private void ClearItem()
     {
