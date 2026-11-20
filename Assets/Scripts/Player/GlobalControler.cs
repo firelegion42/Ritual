@@ -3,6 +3,7 @@ using UnityEngine;
 public abstract class GlobalControler : MonoBehaviour
 {
     protected IMoveable move;
+    protected IInteractable interact;
 
 
     protected virtual void Awake()
@@ -10,6 +11,11 @@ public abstract class GlobalControler : MonoBehaviour
         if(TryGetComponent<IMoveable>(out var moveComponent))
         {
             move = moveComponent;
+        }
+
+        if(TryGetComponent<IInteractable>(out var interactableComponent))
+        {
+            interact = interactableComponent;
         }
     }
 }

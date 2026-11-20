@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
 
-public class TakeItem : MonoBehaviour
+public class TakeItem : MonoBehaviour, IInteractable
 {
     private InventoryManager _inventoryManager;
 
@@ -20,10 +20,9 @@ public class TakeItem : MonoBehaviour
         _inventoryManager = inventoryManager;
     }
 
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out ITakeable takeable))
+        if (other.TryGetComponent(out ITakeable takeable))
         {
             _currentItem = takeable;
             _hintText.gameObject.SetActive(true);
@@ -35,11 +34,13 @@ public class TakeItem : MonoBehaviour
         ClearItem();
     }
 
-   private void SomeInvokedMethod()
+   public void Interact()
     {
-        if (_currentItem != null && Keyboard.current.eKey.wasPressedThisFrame)
+        if (_currentItem != null)
         {
+            Debug.Log("TookItem!");
             _currentItem.Interact(this);
+            
             ClearItem();
         }
     }
